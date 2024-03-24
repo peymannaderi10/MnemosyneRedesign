@@ -15,7 +15,6 @@ function AddFrontBack({ id, onClose, zIndex, bringToFront, onBack, card: initial
   const handleAddCard = () => {
     const updatedCard = { ...localCard, front: frontText, back: backText, level: difficulty };
     setLocalCard(updatedCard);
-    
    
     //saveCardToFile(updatedCard); // Save to file (this function needs to be implemented)
 
