@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import Main from './Windows/Main';
 import AddCards from './Windows/addCardWindows/AddCards';
-import Main from './Windows/MainWindow/Main';
-import AddCards from './Windows/AddCards';
 import BrowseCards from './Windows/BrowseCards';
 import EditCard from './Windows/EditCard';
 import ExampleMulWindow from './Windows/ExampleMulWindow';
