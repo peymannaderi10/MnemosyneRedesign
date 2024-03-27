@@ -7,6 +7,12 @@ function EditCard({ id, onClose, zIndex, bringToFront }) {
     const [isFrontBackSelected, frontBackSelected] = useState(false);
     const [isReversibleSelected, reversibileSelected] = useState(false);
     const [isVocabSelected, vocabSelected] = useState(false);
+    const [difficulty, setDifficulty] = useState(-1); 
+    const difficultyColors = ["#00FF00", "#95FF66", "#F7E379", "#FFC2A6", "#FF6B5E", "#FF0000"];
+  
+    const handleDifficultyClick = (level) => {
+      setDifficulty(level);
+    };
 
     const handleButtonClick = (buttonName) => {
         setSelectedButton(buttonName);
@@ -36,7 +42,7 @@ function EditCard({ id, onClose, zIndex, bringToFront }) {
                 x: 100,
                 y: 100,
                 width: 500,
-                height: 500,
+                height: 600,
             }}
             bounds=".main-area"
             style={{ zIndex }}
@@ -59,24 +65,24 @@ function EditCard({ id, onClose, zIndex, bringToFront }) {
             <div className="flex-grow p-4 flex flex-col">
                 {/* Question input */}
                 <div className="flex-1 mb-2">
-                    <label htmlFor="question" className="text-sm font-bold mb-2 block">Question:</label>
+                    <label htmlFor="question" className="text-sm font-bold mb-2 block text-left">Question:</label>
                     <textarea id="question" className="w-full h-1/3 p-2 border rounded" placeholder="Type the question here"></textarea>
                 </div>
                 {/* Answer input */}
-                <div className="flex-1 mb-4">
-                    <label htmlFor="answer" className="text-sm font-bold mb-2 block">Answer:</label>
-                    <textarea id="answer" className="w-full h-1/3 p-2 border rounded" placeholder="Type the answer here"></textarea>
+                <div className="flex-1 mb-7">
+                    <label htmlFor="answer" className="text-sm font-bold mb-2 block text-left">Answer:</label>
+                    <textarea id="answer" className="w-full h-40 p-2 border rounded" placeholder="Type the answer here"></textarea>
                 </div>
                 
                 {/* Card type and tags */}
                 <div className="mb-4">
-                    <div className="flex items-center">
-                        <span className="text-sm font-bold mr-2">card type:</span>
+                    <div className="flex items-center mb-4">
+                        <span className="text-sm font-bold mr-2">Card Type:</span>
                         <button
-                            onClick={() => handleButtonClick('front-back')}
-                            className={`bg-${selectedButton === 'front-back' ? 'red-500' : 'gray-200'} text-black px-2 py-1 rounded`}
+                            onClick={() => handleButtonClick('Front-back')}
+                            className={`bg-${selectedButton === 'Front-back' ? 'red-500' : 'gray-200'} text-black px-2 py-1 rounded`}
                         >
-                            front-back
+                            Front-back
                         </button>
                         <button
                             onClick={() => handleButtonClick('Reversible')}
@@ -85,28 +91,40 @@ function EditCard({ id, onClose, zIndex, bringToFront }) {
                             Reversible
                         </button>
                         <button
-                            onClick={() => handleButtonClick('vocab')}
-                            className={`bg-${selectedButton === 'vocab' ? 'red-500' : 'gray-200'} text-black px-2 py-1 rounded ml-1`}
+                            onClick={() => handleButtonClick('Vocab')}
+                            className={`bg-${selectedButton === 'Vocab' ? 'red-500' : 'gray-200'} text-black px-2 py-1 rounded ml-1`}
                         >
-                            vocab
+                            Vocab
                         </button>
                     </div>
                     <div className="flex items-center mt-2">
-                        <span className="text-sm font-bold mr-2">tags:</span>
+                        <span className="text-sm font-bold mr-2">Tags:</span>
                         {tags.map(tag => (
-                            <div key={tag} className="bg-gray-200 px-2 py-1 rounded flex items-center mr-2">
-                                <span className="text-sm mr-2">{tag}</span>
+                            <div key={tag} className="bg-gray-200 px-2 py-1 rounded flex items-center mr-2 hover:bg-gray-300">
+                                <span className="text-sm mr-2" >{tag}</span>
                                 <button onClick={() => handleDeleteTag(tag)} className="text-sm">✕</button>
                             </div>
                         ))}
-                        <button onClick={handleAddTag} className="text-2xl bg-blue-500 hover:bg-blue-600 text-white w-8 h-8 rounded-full">
+                        <button onClick={handleAddTag} className="justify-center bg-blue-500 hover:bg-blue-600 text-white w-8 h-8 rounded-full">
                             +
-                        </button>
-
-
-
-
-                                    
+                        </button>     
+                    </div>
+                </div>
+                    <div className="flex items-center mb-4"> {/* This div will be a flex container */}
+                    <span className="text-sm mr-2 font-bold">Difficulty Level:</span> {/* Added a right margin */}
+                    <div className="flex">
+                    {difficultyColors.map((color, index) => (
+                    <button
+                        key={index}
+                        onClick={() => handleDifficultyClick(index)}
+                        style={{ backgroundColor: color }}
+                        className={`font-bold py-1 px-3 m-1 rounded ${
+                        difficulty === index ? 'ring-2 ring-offset-1 ring-black' : ''
+                        }`}
+                    >
+                        {index}
+                    </button>
+                    ))}
                     </div>
                 </div>
 
