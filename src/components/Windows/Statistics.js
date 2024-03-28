@@ -9,7 +9,9 @@ import {
   CartesianGrid,
   Tooltip,
   Legend,
+  Line,
   ResponsiveContainer,
+  LineChart,
 } from "recharts";
 
 import LeftArrowIcon from "../../assets/left-arrow.svg";
@@ -20,7 +22,7 @@ export const tabSelectedStyle =
 export const selectedTabTitle = [
   "Correct/Incorrect Answers",
   "Quiz Scores",
-  "Highest Level Cleared",
+  "Levels Cleared",
   "Time Studied",
 ];
 
@@ -29,37 +31,130 @@ export const data = [
     day: "Sun",
     correct: 3,
     incorrect: 8,
+    highestGrade: 60,
+    avgGrade: 58,
+    timeStudied: 30,
+    levelCleared: 1,
   },
   {
     day: "Mon",
     correct: 4,
     incorrect: 6,
+    highestGrade: 72,
+    avgGrade: 70,
+    timeStudied: 20,
+    levelCleared: 1,
   },
   {
     day: "Tues",
     correct: 7,
     incorrect: 5,
+    highestGrade: 71,
+    avgGrade: 65,
+    timeStudied: 10,
+    levelCleared: 1,
   },
   {
     day: "Wed",
     correct: 8,
     incorrect: 4,
+    highestGrade: 81,
+    avgGrade: 72,
+    timeStudied: 30,
+    levelCleared: 2,
   },
   {
     day: "Thurs",
     correct: 9,
     incorrect: 3,
+    highestGrade: 82,
+    avgGrade: 78,
+    timeStudied: 48,
+    levelCleared: 2,
   },
   {
     day: "Fri",
     correct: 6,
     incorrect: 1,
+    highestGrade: 90,
+    avgGrade: 81,
+    timeStudied: 45,
+    levelCleared: 3,
   },
   {
     day: "Sat",
     correct: 9,
     incorrect: 1,
+    highestGrade: 92,
+    avgGrade: 83,
+    timeStudied: 50,
+    levelCleared: 4,
   },
+];
+
+const chartComps = [
+  <BarChart width={500} height={240} data={data}>
+    <XAxis dataKey="day"> </XAxis>
+    <YAxis />
+    <Legend />
+
+    <Tooltip />
+
+    <Bar dataKey="correct" stackId="a" fill="#abf7b1" />
+    <Bar dataKey="incorrect" stackId="a" fill="#FF6865" />
+  </BarChart>,
+
+  <LineChart width={500} height={240} data={data}>
+    <CartesianGrid strokeDasharray="3 3"></CartesianGrid>
+    <XAxis dataKey="day"></XAxis>
+    <YAxis domain={[50, 100]}></YAxis>
+    <Tooltip></Tooltip>
+    <Legend></Legend>
+    <Line
+      type="monotone"
+      dataKey="highestGrade"
+      name="Highest Grade"
+      stroke="#8884d8"
+    />
+    <Line
+      type="monotone"
+      dataKey="avgGrade"
+      name="Average Grade"
+      stroke="#82ca9d"
+    />
+  </LineChart>,
+  <BarChart width={500} height={240} data={data}>
+    <XAxis dataKey="day"> </XAxis>
+    <YAxis domain={[0, 6]} />
+    <Legend />
+
+    <Tooltip />
+
+    <Bar
+      name="Level Cleared"
+      dataKey="levelCleared"
+      stackId="a"
+      fill="#3459d4"
+    />
+  </BarChart>,
+  <LineChart width={500} height={240} data={data}>
+    <CartesianGrid strokeDasharray="3 3"></CartesianGrid>
+    <XAxis dataKey="day"></XAxis>
+    <YAxis
+      domain={[
+        Math.min(...data.map((item) => item.timeStudied)) - 10,
+        Math.max(...data.map((item) => item.timeStudied)) + 10,
+      ]}
+    ></YAxis>
+    <Tooltip></Tooltip>
+    <Legend></Legend>
+    <Line
+      type="monotone"
+      dataKey="timeStudied"
+      name="Time Studied"
+      stroke="#ab457f"
+    />
+  </LineChart>,
 ];
 
 function Statistics({ id, onClose, zIndex, bringToFront }) {
@@ -130,32 +225,23 @@ function Statistics({ id, onClose, zIndex, bringToFront }) {
           Time Studied
         </button>
       </div>
-      <div className="flex p-4 flex-col">
+      <div className="flex p-4 flex-col justify-between">
         <h3 className="text-center text-lg font-bold mb-4">
           {selectedTabTitle[toggleState]}
         </h3>
         {/* Placeholder for chart */}
-        <div className="w-full bg-gradient-to-r h-64 rounded-lg shadow-inner p-4 flex justify-around items-end">
+        <div className="w-full bg-gradient-to-r h-72 rounded-lg shadow-inner p-4 flex justify-around items-end">
           {/* Mockup bars for the chart */}
-          <BarChart width={500} height={200} data={data}>
-            <XAxis dataKey="day"> </XAxis>
-            <YAxis />
-            <Legend />
-
-            <Tooltip />
-
-            <Bar dataKey="correct" stackId="a" fill="#abf7b1" />
-            <Bar dataKey="incorrect" stackId="a" fill="#FF6865" />
-          </BarChart>
+          {chartComps[toggleState]}
         </div>
         <div className="flex justify-center mt-[1rem] gap-[0.5rem] align-middle">
-          <button className="w-[5%] h-[5%] hover:bg-gray-300 rounded-full p-1">
+          <button className="w-[4%] h-[4%] hover:bg-gray-300 rounded-full p-1">
             <img src={LeftArrowIcon} alt="LeftArrowIcon"></img>
           </button>
-          <span className="font-semibold text-[1.2em]">
+          <span className="font-semibold text-[0.8em]">
             March 24th - March 30th
           </span>
-          <button className="w-[5%] h-[5%] hover:bg-gray-300 rounded-full p-1 ">
+          <button className="w-[4%] h-[4%] hover:bg-gray-300 rounded-full p-1 ">
             <img src={RightArrowIcon} alt="RightArrowIcon"></img>
           </button>
         </div>
