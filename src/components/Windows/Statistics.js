@@ -164,6 +164,41 @@ function Statistics({ id, onClose, zIndex, bringToFront }) {
     setToggleState(index);
   };
 
+  const getStartDateOfWeek = () => {
+    const today = new Date();
+    const dayOfWeek = today.getDay();
+    const diff = today.getDate() - dayOfWeek;
+    return new Date(today.setDate(diff));
+  };
+
+  const [startDate, setStartDate] = useState(getStartDateOfWeek());
+
+  const goToNextWeek = () => {
+    const newStartDate = new Date(startDate);
+
+    newStartDate.setDate(startDate.getDate() + 7);
+    setStartDate(newStartDate);
+  };
+
+  const goToPreviousWeek = () => {
+    const newStartDate = new Date(startDate);
+
+    newStartDate.setDate(startDate.getDate() - 7);
+    setStartDate(newStartDate);
+  };
+
+  const endDate = new Date(startDate);
+  endDate.setDate(startDate.getDate() + 6);
+
+  const startDateFormatted = startDate.toLocaleDateString("en-US", {
+    month: "long",
+    day: "numeric",
+  });
+  const endDateFormatted = endDate.toLocaleDateString("en-US", {
+    month: "long",
+    day: "numeric",
+  });
+
   return (
     <Rnd
       default={{
@@ -236,13 +271,21 @@ function Statistics({ id, onClose, zIndex, bringToFront }) {
         </div>
         <div className="flex justify-center mt-[1rem] gap-[0.5rem] align-middle">
           <button className="w-[4%] h-[4%] hover:bg-gray-300 rounded-full p-1">
-            <img src={LeftArrowIcon} alt="LeftArrowIcon"></img>
+            <img
+              src={LeftArrowIcon}
+              alt="LeftArrowIcon"
+              onClick={goToPreviousWeek}
+            ></img>
           </button>
           <span className="font-semibold text-[0.8em]">
-            March 24th - March 30th
+            {startDateFormatted} - {endDateFormatted}
           </span>
           <button className="w-[4%] h-[4%] hover:bg-gray-300 rounded-full p-1 ">
-            <img src={RightArrowIcon} alt="RightArrowIcon"></img>
+            <img
+              src={RightArrowIcon}
+              alt="RightArrowIcon"
+              onClick={goToNextWeek}
+            ></img>
           </button>
         </div>
       </div>
