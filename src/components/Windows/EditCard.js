@@ -7,13 +7,9 @@ function EditCard({ id, onClose, zIndex, bringToFront }) {
     const [isFrontBackSelected, frontBackSelected] = useState(false);
     const [isReversibleSelected, reversibileSelected] = useState(false);
     const [isVocabSelected, vocabSelected] = useState(false);
-    const [difficulty, setDifficulty] = useState(-1); 
-    const difficultyColors = ["#00FF00", "#95FF66", "#F7E379", "#FFC2A6", "#FF6B5E", "#FF0000"];
+    const [question, setQuestion] = useState('');
+    const [answer, setAnswer] = useState('');
   
-    const handleDifficultyClick = (level) => {
-      setDifficulty(level);
-    };
-
     const handleButtonClick = (buttonName) => {
         setSelectedButton(buttonName);
         frontBackSelected(buttonName === 'Front-Back');
@@ -34,6 +30,10 @@ function EditCard({ id, onClose, zIndex, bringToFront }) {
         const newTags = tags.filter(tag => tag !== tagToDelete);
         setTags(newTags);
         console.log("Updated tags:", newTags);
+    };
+
+    const handleOkClick = () => {
+        console.log("Question:", question, "Answer:", answer);
     };
 
     return (
@@ -66,12 +66,24 @@ function EditCard({ id, onClose, zIndex, bringToFront }) {
                 {/* Question input */}
                 <div className="flex-1 mb-2">
                     <label htmlFor="question" className="text-sm font-bold mb-2 block text-left">Question:</label>
-                    <textarea id="question" className="w-full h-1/3 p-2 border rounded" placeholder="Type the question here"></textarea>
+                    <textarea 
+                        id="question" 
+                        className="w-full h-1/3 p-2 border rounded" 
+                        placeholder="Type the question here"
+                        value={question}
+                        onChange={(e) => setQuestion(e.target.value)}
+                    ></textarea>
                 </div>
                 {/* Answer input */}
-                <div className="flex-1 mb-7">
+                <div className="flex-1 mb-10">
                     <label htmlFor="answer" className="text-sm font-bold mb-2 block text-left">Answer:</label>
-                    <textarea id="answer" className="w-full h-40 p-2 border rounded" placeholder="Type the answer here"></textarea>
+                    <textarea 
+                        id="answer" 
+                        className="w-full h-40 p-2 border rounded" 
+                        placeholder="Type the answer here"
+                        value={answer}
+                        onChange={(e) => setAnswer(e.target.value)}
+                    ></textarea>
                 </div>
                 
                 {/* Card type and tags */}
@@ -110,30 +122,13 @@ function EditCard({ id, onClose, zIndex, bringToFront }) {
                         </button>     
                     </div>
                 </div>
-                    <div className="flex items-center mb-4"> {/* This div will be a flex container */}
-                    <span className="text-sm mr-2 font-bold">Difficulty Level:</span> {/* Added a right margin */}
-                    <div className="flex">
-                    {difficultyColors.map((color, index) => (
-                    <button
-                        key={index}
-                        onClick={() => handleDifficultyClick(index)}
-                        style={{ backgroundColor: color }}
-                        className={`font-bold py-1 px-3 m-1 rounded ${
-                        difficulty === index ? 'ring-2 ring-offset-1 ring-black' : ''
-                        }`}
-                    >
-                        {index}
-                    </button>
-                    ))}
-                    </div>
-                </div>
 
             {/* Action buttons */}
                 <div className="absolute bottom-4 left-4 right-4 flex justify-between">
                     <button className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">
                         Cancel
                     </button>
-                    <button className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">
+                    <button onClick={() => handleOkClick()} className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">
                         OK
                     </button>
                 </div>
