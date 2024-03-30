@@ -2,8 +2,12 @@ import React, { useState } from 'react';
 import { Rnd } from 'react-rnd';
 import QuestionMode1 from './MainWindow/QuestionMode1';
 import QuestionMode2 from './MainWindow/QuestionMode2';
-import { FaStar, FaToggleOff, FaToggleOn } from 'react-icons/fa';
+import { FaStar, FaToggleOff, FaToggleOn,FaChartBar } from 'react-icons/fa';
 import { FaPlus, FaEdit, FaTrash, FaBook, FaDoorOpen } from 'react-icons/fa';
+import AddCards from './addCardWindows/AddCards';
+import Statistics from './Statistics';
+import EditCard from './EditCard';
+
 const questions = [
   {
     question: 'What is the capital of France?',
@@ -33,6 +37,50 @@ function MainQuiz({ id, onClose, zIndex, bringToFront }) {
   const [showAnswer, setShowAnswer] = useState(false);
   const [rating, setRating] = useState(0);
   const [questionMode, setQuestionMode] = useState('mode1');
+  const [showAddCards, setShowAddCards] = useState(false);
+  const [addCardsZIndex, setAddCardsZIndex] = useState(zIndex);
+  const [showEditCard, setShowEditCard] = useState(false);
+  const [editCardZIndex, setEditCardZIndex] = useState(zIndex);
+  const [showBrowseCards, setShowBrowseCards] = useState(false);
+  const [browseCardsZIndex, setBrowseCardsZIndex] = useState(zIndex);
+  const [showStatistics, setShowStatistics] = useState(false);
+  const [statisticsZIndex, setStatisticsZIndex] = useState(zIndex);
+
+  const openAddCards = () => {
+    setAddCardsZIndex(zIndex + 1); // Ensure the new window is on top
+    setShowAddCards(true);
+  };
+  
+  const closeAddCards = () => {
+    setShowAddCards(false);
+  };
+  
+  const openEditCard = () => {
+    setEditCardZIndex(zIndex + 1); // Ensure the new window is on top
+    setShowEditCard(true);
+  };
+  
+  const closeEditCard = () => {
+    setShowEditCard(false);
+  };
+  
+  const openBrowseCards = () => {
+    setBrowseCardsZIndex(zIndex + 1); // Ensure the new window is on top
+    setShowBrowseCards(true);
+  };
+  
+  const closeBrowseCards = () => {
+    setShowBrowseCards(false);
+  };
+
+  const openStatistics = () => {
+    setStatisticsZIndex(zIndex + 1); // Ensure the new window is on top
+    setShowStatistics(true);
+  };
+  
+  const closeStatistics = () => {
+    setShowStatistics(false);
+  };
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
@@ -53,6 +101,7 @@ function MainQuiz({ id, onClose, zIndex, bringToFront }) {
   };
 
   return (
+    <>
     <Rnd
       default={{ x: 50, y: 50, width: 500 }}
       bounds=".main-area"
@@ -104,6 +153,7 @@ function MainQuiz({ id, onClose, zIndex, bringToFront }) {
       <div className="flex flex-col items-center space-y-8 mb-4">
         <div
           className="sidebar-link relative cursor-pointer"
+          onClick={openAddCards}
           onMouseEnter={(e) => e.currentTarget.querySelector('span').classList.remove('hidden')}
           onMouseLeave={(e) => e.currentTarget.querySelector('span').classList.add('hidden')}
         >
@@ -116,6 +166,8 @@ function MainQuiz({ id, onClose, zIndex, bringToFront }) {
         </div>
         <div
           className="sidebar-link relative cursor-pointer"
+          onClick={openEditCard}
+
           onMouseEnter={(e) => e.currentTarget.querySelector('span').classList.remove('hidden')}
           onMouseLeave={(e) => e.currentTarget.querySelector('span').classList.add('hidden')}
         >
@@ -150,6 +202,25 @@ function MainQuiz({ id, onClose, zIndex, bringToFront }) {
             Browse Cards
           </span>
         </div>
+        
+        <div
+  className="sidebar-link relative cursor-pointer"
+  onClick={openStatistics}
+  onMouseEnter={(e) => e.currentTarget.querySelector('span').classList.remove('hidden')}
+  onMouseLeave={(e) => e.currentTarget.querySelector('span').classList.add('hidden')}
+>
+  <div className="flex items-center bg-white rounded-full p-2 shadow-md">
+    <FaChartBar className="text-purple-500" />
+  </div>
+  <span className="hidden absolute bottom-0 translate-y-full bg-gray-700 text-white text-xs px-2 py-1 rounded-md">
+    Statistics
+  </span>
+</div>
+
+
+
+
+
       </div>
     </div>
     <div className="cursor-pointer sidebar-link flex items-center px-2 py-1 hover:bg-gray-200 rounded-md transition-colors duration-300">
@@ -218,6 +289,33 @@ function MainQuiz({ id, onClose, zIndex, bringToFront }) {
         </div>
       </div>
     </Rnd>
+    {showAddCards && (
+  <AddCards
+    id={new Date().getTime()}
+    onClose={closeAddCards}
+    zIndex={addCardsZIndex}
+    bringToFront={() => setAddCardsZIndex(addCardsZIndex + 1)}
+  />
+)}
+{showEditCard && (
+  <EditCard
+    id={new Date().getTime()}
+    onClose={closeEditCard}
+    zIndex={editCardZIndex}
+    bringToFront={() => setEditCardZIndex(editCardZIndex + 1)}
+  />
+)}
+{showStatistics && (
+  <Statistics
+    id={new Date().getTime()}
+    onClose={closeStatistics}
+    zIndex={statisticsZIndex}
+    bringToFront={() => setStatisticsZIndex(statisticsZIndex + 1)}
+  />
+)}
+
+    </>
+    
   );
 }
 
