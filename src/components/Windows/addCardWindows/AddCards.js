@@ -8,7 +8,7 @@ function AddCards({ id, onClose, zIndex, bringToFront}) {
   const [currentStep, setCurrentStep] = useState('addCards');
   const [card, setCard] = useState({
     cardType: "",
-    Topic: "",
+    Topic: [],
     Correspondence: ["", ""],
     front: "",
     back: "",
