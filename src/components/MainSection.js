@@ -1,6 +1,7 @@
 
 import React, { useState } from "react";
-import Main from "./Windows/MainWindow/Main";
+
+import MainQuiz from "./Windows/Main";
 import AddCards from "./Windows/addCardWindows/AddCards";
 import BrowseCards from "./Windows/BrowseCards";
 import EditCard from "./Windows/EditCard";
@@ -87,7 +88,7 @@ function MainSection() {
         <div className="flex-grow main-area">
           {activeWindows.map((isActive, index) => {
             const WindowComponent = [
-              Main,
+              MainQuiz,
               AddCards,
               EditCard,
               BrowseCards,
