@@ -4,7 +4,6 @@ import QuestionMode1 from './MainWindow/QuestionMode1';
 import QuestionMode2 from './MainWindow/QuestionMode2';
 import { FaStar, FaToggleOff, FaToggleOn } from 'react-icons/fa';
 import { FaPlus, FaEdit, FaTrash, FaBook, FaDoorOpen } from 'react-icons/fa';
-import App from '../../App';
 const questions = [
   {
     question: 'What is the capital of France?',
@@ -28,7 +27,7 @@ const questions = [
   },
 ];
 
-function Main({ id, onClose, zIndex, bringToFront }) {
+function MainQuiz({ id, onClose, zIndex, bringToFront }) {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [showAnswer, setShowAnswer] = useState(false);
@@ -222,4 +221,4 @@ function Main({ id, onClose, zIndex, bringToFront }) {
   );
 }
 
-export default Main;
+export default MainQuiz;
