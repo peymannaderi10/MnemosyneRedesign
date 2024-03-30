@@ -1,34 +1,56 @@
 import React, { useState } from 'react';
 import { Rnd } from 'react-rnd';
-import CardPreview from './CardPreview'; 
+import CardPreview from './CardPreview';
+
+function ConfirmationModal({ onConfirm, onCancel }) {
+  return (
+    <div className="absolute inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center">
+      <div className="bg-white p-4 rounded-lg shadow-xl">
+        <h2 className="text-lg mb-4">Confirm Add Card</h2>
+        <p>Are you sure you want to add this card?</p>
+        <div className="flex justify-end mt-4">
+          <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded mr-2" onClick={onCancel}>Cancel</button>
+          <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-3 rounded" onClick={onConfirm}>Confirm</button>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 function AddFrontBack({ id, onClose, zIndex, bringToFront, onBack, card: initialCard }) {
   const [localCard, setLocalCard] = useState(initialCard);
   const [frontText, setFrontText] = useState('');
   const [backText, setBackText] = useState('');
-  const [difficulty, setDifficulty] = useState(-1); 
-  const difficultyColors = ["#00FF00", "#95FF66", "#F7E379", "#FFC2A6", "#FF6B5E", "#FF0000"];
+  const [difficulty, setDifficulty] = useState(-1);
   const [showPreview, setShowPreview] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const difficultyColors = ["#00FF00", "#95FF66", "#F7E379", "#FFC2A6", "#FF6B5E", "#FF0000"];
+
+  const handleAddCard = () => {
+    setIsModalOpen(true); // Show confirmation modal
+  };
   const handleDifficultyClick = (level) => {
     setDifficulty(level);
   };
-
-  const handleAddCard = () => {
+  const confirmAddCard = () => {
     const updatedCard = { ...localCard, front: frontText, back: backText, level: difficulty };
     setLocalCard(updatedCard);
    
-    //saveCardToFile(updatedCard); // Save to file (this function needs to be implemented)
+    //saveCardToFile(updatedCard); // Implement this function as needed
     onClose(id);
     console.log('Card Added', updatedCard);
+    setIsModalOpen(false); // Close modal
+  };
+
+  const cancelAddCard = () => {
+    setIsModalOpen(false); // Close modal without adding the card
   };
 
   const handlePreviewToggle = () => {
-    console.log("Toggling preview");
     setShowPreview(!showPreview);
   };
-  
-  
+
   const isAddCardEnabled = frontText && backText && difficulty >= 0;
 
   return (
@@ -40,10 +62,11 @@ function AddFrontBack({ id, onClose, zIndex, bringToFront, onBack, card: initial
         onMouseDown={bringToFront}
         enableResizing={false}
     >
+      {isModalOpen && <ConfirmationModal onConfirm={confirmAddCard} onCancel={cancelAddCard} />}
       {showPreview && (
         <div
-          className="absolute inset-0 bg-gray-500 bg-opacity-50 z-10" // This will create the gray overlay
-          style={{ zIndex: zIndex-1 }} // Ensure this zIndex is lower than CardPreview but higher than the rest of the content
+          className="absolute inset-0 bg-gray-500 bg-opacity-50 z-10"
+          style={{ zIndex: zIndex-1 }}
         ></div>
       )}
       <div className="flex-none bg-gray-700 p-2 flex items-center justify-between text-white">
