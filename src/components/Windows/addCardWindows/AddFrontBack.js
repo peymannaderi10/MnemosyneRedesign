@@ -43,7 +43,7 @@ function AddFrontBack({ id, onClose, zIndex, bringToFront, onBack, card: initial
       {showPreview && (
         <div
           className="absolute inset-0 bg-gray-500 bg-opacity-50 z-10" // This will create the gray overlay
-          style={{ zIndex: 40 }} // Ensure this zIndex is lower than CardPreview but higher than the rest of the content
+          style={{ zIndex: zIndex-1 }} // Ensure this zIndex is lower than CardPreview but higher than the rest of the content
         ></div>
       )}
       <div className="flex-none bg-gray-700 p-2 flex items-center justify-between text-white">
