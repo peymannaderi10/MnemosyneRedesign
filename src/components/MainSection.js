@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import Main from "./Windows/MainWindow/Main";
 import AddCards from "./Windows/addCardWindows/AddCards";
@@ -5,6 +6,7 @@ import BrowseCards from "./Windows/BrowseCards";
 import EditCard from "./Windows/EditCard";
 import ExampleMulWindow from "./Windows/ExampleMulWindow";
 import Statistics from "./Windows/Statistics";
+
 
 function MainSection() {
   const [activeWindows, setActiveWindows] = useState(Array(6).fill(false));
