@@ -1,14 +1,48 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Rnd } from 'react-rnd';
 
 function EditCard({ id, onClose, zIndex, bringToFront }) {
+    const [selectedButton, setSelectedButton] = useState(null);
+    const [tags, setTags] = useState(['tag1', 'tag2']); 
+    const [isFrontBackSelected, frontBackSelected] = useState(false);
+    const [isReversibleSelected, reversibileSelected] = useState(false);
+    const [isVocabSelected, vocabSelected] = useState(false);
+    const [question, setQuestion] = useState('');
+    const [answer, setAnswer] = useState('');
+  
+    const handleButtonClick = (buttonName) => {
+        setSelectedButton(buttonName);
+        frontBackSelected(buttonName === 'Front-Back');
+        reversibileSelected(buttonName === 'Reversible');
+        vocabSelected(buttonName === 'Vocab');
+        console.log("card type: ", buttonName);
+    };
+
+    const handleAddTag = () => {
+        const newTag = prompt('Enter a new tag:');
+        if (newTag) {
+            setTags([...tags, newTag]);
+            console.log("Updated tags:", [...tags, newTag]);
+        }
+    };
+
+    const handleDeleteTag = (tagToDelete) => {
+        const newTags = tags.filter(tag => tag !== tagToDelete);
+        setTags(newTags);
+        console.log("Updated tags:", newTags);
+    };
+
+    const handleOkClick = () => {
+        console.log("Question:", question, "Answer:", answer);
+    };
+
     return (
         <Rnd
             default={{
                 x: 100,
                 y: 100,
                 width: 500,
-                height: 500,
+                height: 600,
             }}
             bounds=".main-area"
             style={{ zIndex }}
@@ -29,46 +63,76 @@ function EditCard({ id, onClose, zIndex, bringToFront }) {
                 ></button>
             </div>
             <div className="flex-grow p-4 flex flex-col">
-                {/* Card type and tags */}
-                <div className="flex items-center mb-4">
-                    <div className="flex items-center mr-4">
-                        <span className="text-sm font-bold mr-2">card type:</span>
-                        <button className="bg-gray-200 hover:bg-gray-300 text-black px-2 py-1 rounded">front-back</button>
-                        <button className="bg-gray-200 hover:bg-gray-300 text-black px-2 py-1 rounded ml-1">Reversible</button>
-                        <button className="bg-gray-200 hover:bg-gray-300 text-black px-2 py-1 rounded ml-1">vocab</button>
-                    </div>
-                    <div className="flex items-center">
-                        <span className="text-sm font-bold mr-2">tags:</span>
-                        <div className="bg-gray-200 px-2 py-1 rounded flex items-center mr-1">
-                            <span className="text-sm mr-2">tag1</span>
-                            <button className="text-sm">✕</button>
-                        </div>
-                        <div className="bg-gray-200 px-2 py-1 rounded flex items-center mr-2">
-                            <span className="text-sm mr-2">tag2</span>
-                            <button className="text-sm">✕</button>
-                        </div>
-                        <button className="bg-blue-500 hover:bg-blue-600 text-white p-1 rounded-full text-lg">+</button>
-                    </div>
-                </div>
                 {/* Question input */}
                 <div className="flex-1 mb-2">
-                    <label htmlFor="question" className="text-sm font-bold mb-2 block">Question:</label>
-                    <textarea id="question" className="w-full h-1/3 p-2 border rounded" placeholder="Type the question here"></textarea>
+                    <label htmlFor="question" className="text-sm font-bold mb-2 block text-left">Question:</label>
+                    <textarea 
+                        id="question" 
+                        className="w-full h-1/3 p-2 border rounded" 
+                        placeholder="Type the question here"
+                        value={question}
+                        onChange={(e) => setQuestion(e.target.value)}
+                    ></textarea>
                 </div>
                 {/* Answer input */}
-                <div className="flex-1 mb-4">
-                    <label htmlFor="answer" className="text-sm font-bold mb-2 block">Answer:</label>
-                    <textarea id="answer" className="w-full h-1/3 p-2 border rounded" placeholder="Type the answer here"></textarea>
+                <div className="flex-1 mb-10">
+                    <label htmlFor="answer" className="text-sm font-bold mb-2 block text-left">Answer:</label>
+                    <textarea 
+                        id="answer" 
+                        className="w-full h-40 p-2 border rounded" 
+                        placeholder="Type the answer here"
+                        value={answer}
+                        onChange={(e) => setAnswer(e.target.value)}
+                    ></textarea>
                 </div>
-                {/* Action buttons */}
-                <div className="flex justify-end">
-                    <button className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded mr-2">
+                
+                {/* Card type and tags */}
+                <div className="mb-4">
+                    <div className="flex items-center mb-4">
+                        <span className="text-sm font-bold mr-2">Card Type:</span>
+                        <button
+                            onClick={() => handleButtonClick('Front-back')}
+                            className={`bg-${selectedButton === 'Front-back' ? 'red-500' : 'gray-200'} text-black px-2 py-1 rounded`}
+                        >
+                            Front-back
+                        </button>
+                        <button
+                            onClick={() => handleButtonClick('Reversible')}
+                            className={`bg-${selectedButton === 'Reversible' ? 'red-500' : 'gray-200'} text-black px-2 py-1 rounded ml-1`}
+                        >
+                            Reversible
+                        </button>
+                        <button
+                            onClick={() => handleButtonClick('Vocab')}
+                            className={`bg-${selectedButton === 'Vocab' ? 'red-500' : 'gray-200'} text-black px-2 py-1 rounded ml-1`}
+                        >
+                            Vocab
+                        </button>
+                    </div>
+                    <div className="flex items-center mt-2">
+                        <span className="text-sm font-bold mr-2">Tags:</span>
+                        {tags.map(tag => (
+                            <div key={tag} className="bg-gray-200 px-2 py-1 rounded flex items-center mr-2 hover:bg-gray-300">
+                                <span className="text-sm mr-2" >{tag}</span>
+                                <button onClick={() => handleDeleteTag(tag)} className="text-sm">✕</button>
+                            </div>
+                        ))}
+                        <button onClick={handleAddTag} className="justify-center bg-blue-500 hover:bg-blue-600 text-white w-8 h-8 rounded-full">
+                            +
+                        </button>     
+                    </div>
+                </div>
+
+            {/* Action buttons */}
+                <div className="absolute bottom-4 left-4 right-4 flex justify-between">
+                    <button className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">
                         Cancel
                     </button>
-                    <button className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">
+                    <button onClick={() => handleOkClick()} className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">
                         OK
                     </button>
                 </div>
+
             </div>
         </Rnd>
     );
