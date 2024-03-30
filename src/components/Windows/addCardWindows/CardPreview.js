@@ -50,6 +50,7 @@ const CardPreview = ({ onClose, zIndex, frontText, backText, width }) => {
                     <div className="text-lg font-semibold mb-2">
                         {isFlipped ? 'Back' : 'Front'}
                     </div>
+                    <p className="text-gray-600">Click to Flip Card</p>
                     <ReactCardFlip isFlipped={isFlipped} flipDirection="vertical">
                         <div
                             style={{ ...cardStyle, ...cardHoverStyle }} // Merge styles for hover effect
@@ -71,6 +72,7 @@ const CardPreview = ({ onClose, zIndex, frontText, backText, width }) => {
                         </div>
                     </ReactCardFlip>
                 </div>
+                
                 <button
                     onClick={onClose}
                     className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full m-2"
