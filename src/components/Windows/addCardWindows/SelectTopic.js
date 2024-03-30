@@ -3,24 +3,30 @@ import { Rnd } from 'react-rnd';
 
 function SelectTopic({ id, onClose, zIndex, bringToFront, onNext, onBack, card: initialCard }) {
   const [localCard, setLocalCard] = useState(initialCard);
-  const [topics, setTopics] = useState(["Math", "Science", "CompSci", "Biology", "Physics","b", "a", "test", "2", "d"]); // REPLACE with JSON import
-  const [selectedTopic, setSelectedTopic] = useState(initialCard.Topic || '');
+  const [topics, setTopics] = useState(["Math", "Science", "CompSci", "Biology", "Physics","EarthSci", "Psych", "History", "Kin2021", "CS4474"]); // REPLACE with JSON import
+  const [selectedTopics, setSelectedTopics] = useState(initialCard.Topics || []);
   const [newTopic, setNewTopic] = useState('');
   const [showInput, setShowInput] = useState(false);
 
 
   
   const handleTopicClick = (topic) => {
-    setSelectedTopic(topic); // Update the selected topic
-    setLocalCard({ ...localCard, Topic: topic });
-    setShowInput(false);
+    const index = selectedTopics.indexOf(topic);
+    let newSelectedTopics = [...selectedTopics];
+  
+    if (index > -1) {
+      newSelectedTopics.splice(index, 1);
+    } else {
+      newSelectedTopics.push(topic);
+    }
+  
+    setSelectedTopics(newSelectedTopics);
+    setLocalCard({ ...localCard, Topics: newSelectedTopics });
     console.log(localCard);
-
   };
-
+  
   const handleNewTopic = () => {
     setShowInput(true);
-    setSelectedTopic(''); 
   };
 
   const handleNewTopicChange = (e) => {
@@ -63,12 +69,12 @@ function SelectTopic({ id, onClose, zIndex, bringToFront, onNext, onBack, card: 
         </button>
       </div>
       <div className="flex-grow p-4 overflow-auto grid grid-cols-3 gap-2 content-start">
-        {topics.map((topic, index) => (
+      {topics.map((topic, index) => (
           <button 
             key={index} 
             onClick={() => handleTopicClick(topic)}
             className={`w-full font-bold py-2 px-4 rounded focus:outline-none ${
-              selectedTopic === topic ? 'bg-blue-700' : 'bg-blue-500 hover:bg-blue-600'
+              selectedTopics.includes(topic) ? 'bg-gradient-to-r from-purple-600 to-pink-600' : 'bg-blue-400 hover:bg-blue-600'
             } text-white`}
           >
             {topic}
