@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Rnd } from "react-rnd";
 import {
   BarChart,
@@ -17,6 +17,8 @@ import {
 import LeftArrowIcon from "../../assets/left-arrow.svg";
 import RightArrowIcon from "../../assets/right-arrow.svg";
 
+import statData from "../../data/statData.json";
+
 export const tabSelectedStyle =
   "font-semibold bg-gray-400 opacity-50 px-[2%] py-[1%] rounded-xl z-[1]";
 export const selectedTabTitle = [
@@ -26,139 +28,9 @@ export const selectedTabTitle = [
   "Time Studied",
 ];
 
-export const data = [
-  {
-    day: "Sun",
-    correct: 3,
-    incorrect: 8,
-    highestGrade: 60,
-    avgGrade: 58,
-    timeStudied: 30,
-    levelCleared: 1,
-  },
-  {
-    day: "Mon",
-    correct: 4,
-    incorrect: 6,
-    highestGrade: 72,
-    avgGrade: 70,
-    timeStudied: 20,
-    levelCleared: 1,
-  },
-  {
-    day: "Tues",
-    correct: 7,
-    incorrect: 5,
-    highestGrade: 71,
-    avgGrade: 65,
-    timeStudied: 10,
-    levelCleared: 1,
-  },
-  {
-    day: "Wed",
-    correct: 8,
-    incorrect: 4,
-    highestGrade: 81,
-    avgGrade: 72,
-    timeStudied: 30,
-    levelCleared: 2,
-  },
-  {
-    day: "Thurs",
-    correct: 9,
-    incorrect: 3,
-    highestGrade: 82,
-    avgGrade: 78,
-    timeStudied: 48,
-    levelCleared: 2,
-  },
-  {
-    day: "Fri",
-    correct: 6,
-    incorrect: 1,
-    highestGrade: 90,
-    avgGrade: 81,
-    timeStudied: 45,
-    levelCleared: 3,
-  },
-  {
-    day: "Sat",
-    correct: 9,
-    incorrect: 1,
-    highestGrade: 92,
-    avgGrade: 83,
-    timeStudied: 50,
-    levelCleared: 4,
-  },
-];
-
-const chartComps = [
-  <BarChart width={500} height={240} data={data}>
-    <XAxis dataKey="day"> </XAxis>
-    <YAxis />
-    <Legend />
-
-    <Tooltip />
-
-    <Bar dataKey="correct" stackId="a" fill="#abf7b1" />
-    <Bar dataKey="incorrect" stackId="a" fill="#FF6865" />
-  </BarChart>,
-
-  <LineChart width={500} height={240} data={data}>
-    <CartesianGrid strokeDasharray="3 3"></CartesianGrid>
-    <XAxis dataKey="day"></XAxis>
-    <YAxis domain={[50, 100]}></YAxis>
-    <Tooltip></Tooltip>
-    <Legend></Legend>
-    <Line
-      type="monotone"
-      dataKey="highestGrade"
-      name="Highest Grade"
-      stroke="#8884d8"
-    />
-    <Line
-      type="monotone"
-      dataKey="avgGrade"
-      name="Average Grade"
-      stroke="#82ca9d"
-    />
-  </LineChart>,
-  <BarChart width={500} height={240} data={data}>
-    <XAxis dataKey="day"> </XAxis>
-    <YAxis domain={[0, 6]} />
-    <Legend />
-
-    <Tooltip />
-
-    <Bar
-      name="Level Cleared"
-      dataKey="levelCleared"
-      stackId="a"
-      fill="#3459d4"
-    />
-  </BarChart>,
-  <LineChart width={500} height={240} data={data}>
-    <CartesianGrid strokeDasharray="3 3"></CartesianGrid>
-    <XAxis dataKey="day"></XAxis>
-    <YAxis
-      domain={[
-        Math.min(...data.map((item) => item.timeStudied)) - 10,
-        Math.max(...data.map((item) => item.timeStudied)) + 10,
-      ]}
-    ></YAxis>
-    <Tooltip></Tooltip>
-    <Legend></Legend>
-    <Line
-      type="monotone"
-      dataKey="timeStudied"
-      name="Time Studied"
-      stroke="#ab457f"
-    />
-  </LineChart>,
-];
-
 function Statistics({ id, onClose, zIndex, bringToFront }) {
   const [toggleState, setToggleState] = useState(0);
+  const [data, setData] = useState([]);
 
   const toggleTab = (index) => {
     setToggleState(index);
@@ -170,34 +42,118 @@ function Statistics({ id, onClose, zIndex, bringToFront }) {
     const diff = today.getDate() - dayOfWeek;
     return new Date(today.setDate(diff));
   };
-
   const [startDate, setStartDate] = useState(getStartDateOfWeek());
 
   const goToNextWeek = () => {
-    const newStartDate = new Date(startDate);
-
-    newStartDate.setDate(startDate.getDate() + 7);
-    setStartDate(newStartDate);
+    setStartDate((prevStartDate) => {
+      const newStartDate = new Date(prevStartDate);
+      newStartDate.setDate(prevStartDate.getDate() + 7);
+      console.log(newStartDate);
+      return newStartDate;
+    });
   };
 
   const goToPreviousWeek = () => {
-    const newStartDate = new Date(startDate);
-
-    newStartDate.setDate(startDate.getDate() - 7);
-    setStartDate(newStartDate);
+    setStartDate((prevStartDate) => {
+      const newStartDate = new Date(prevStartDate);
+      newStartDate.setDate(prevStartDate.getDate() - 7);
+      return newStartDate;
+    });
   };
 
   const endDate = new Date(startDate);
   endDate.setDate(startDate.getDate() + 6);
 
-  const startDateFormatted = startDate.toLocaleDateString("en-US", {
-    month: "long",
-    day: "numeric",
-  });
-  const endDateFormatted = endDate.toLocaleDateString("en-US", {
-    month: "long",
-    day: "numeric",
-  });
+  useEffect(() => {
+    fetchDataForWeek();
+  }, [startDate]);
+
+  const fetchDataForWeek = useCallback(() => {
+    const startOfStartDate = new Date(startDate);
+    startOfStartDate.setDate(startOfStartDate.getDate() - 1);
+    startOfStartDate.setHours(0, 0, 0, 0);
+
+    const endOfEndDate = new Date(endDate);
+    endOfEndDate.setHours(0, 0, 0, 0);
+
+    const filteredData = Object.entries(statData).map(([date, data]) => ({
+      date,
+      ...data,
+    }));
+
+    const filteredWeekData = filteredData.filter((dataObject) => {
+      const date = new Date(dataObject.date);
+      return date >= startOfStartDate && date <= endOfEndDate;
+    });
+    console.log(startOfStartDate, endOfEndDate);
+    console.log(filteredWeekData);
+    setData(filteredWeekData);
+  }, [startDate]);
+
+  const chartComps = [
+    <BarChart width={500} height={240} data={data}>
+      <XAxis dataKey="day"> </XAxis>
+      <YAxis />
+      <Legend />
+
+      <Tooltip />
+
+      <Bar dataKey="correct" stackId="a" fill="#03CE4a" />
+      <Bar dataKey="incorrect" stackId="a" fill="#FF6865" />
+    </BarChart>,
+
+    <LineChart width={500} height={240} data={data}>
+      <CartesianGrid strokeDasharray="3 3"></CartesianGrid>
+      <XAxis dataKey="day"></XAxis>
+      <YAxis domain={[50, 100]}></YAxis>
+      <Tooltip></Tooltip>
+      <Legend></Legend>
+      <Line
+        type="monotone"
+        dataKey="highestGrade"
+        name="Highest Grade"
+        stroke="#8884d8"
+      />
+      <Line
+        type="monotone"
+        dataKey="avgGrade"
+        name="Average Grade"
+        stroke="#82ca9d"
+      />
+    </LineChart>,
+    <BarChart width={500} height={240} data={data}>
+      <XAxis dataKey="day"> </XAxis>
+      <YAxis domain={[0, 6]} />
+      <Legend />
+
+      <Tooltip />
+
+      <Bar
+        name="Level Cleared"
+        dataKey="levelCleared"
+        stackId="a"
+        fill="#3459d4"
+      />
+    </BarChart>,
+    <LineChart width={500} height={240} data={data}>
+      <CartesianGrid strokeDasharray="3 3"></CartesianGrid>
+      <XAxis dataKey="day"></XAxis>
+      <YAxis
+        domain={[
+          Math.min(...data.map((item) => item.timeStudied)) - 10,
+          Math.max(...data.map((item) => item.timeStudied)) + 10,
+        ]}
+      ></YAxis>
+      <Tooltip></Tooltip>
+      <Legend></Legend>
+      <Line
+        type="monotone"
+        dataKey="timeStudied"
+        name="Time Studied"
+        stroke="#ab457f"
+      />
+    </LineChart>,
+  ];
 
   return (
     <Rnd
@@ -269,22 +225,32 @@ function Statistics({ id, onClose, zIndex, bringToFront }) {
           {/* Mockup bars for the chart */}
           {chartComps[toggleState]}
         </div>
-        <div className="flex justify-center mt-[1rem] gap-[0.5rem] align-middle">
-          <button className="w-[4%] h-[4%] hover:bg-gray-300 rounded-full p-1">
+        <div className="flex justify-center gap-[0.5rem] align-middle">
+          <button className="w-[1.8rem] h-[1.8rem] hover:bg-gray-300 rounded-full p-1">
             <img
               src={LeftArrowIcon}
               alt="LeftArrowIcon"
               onClick={goToPreviousWeek}
+              className="w-[80%]"
             ></img>
           </button>
-          <span className="font-semibold text-[0.8em]">
-            {startDateFormatted} - {endDateFormatted}
+          <span className="font-semibold text-[0.8em] text-center">
+            {startDate.toLocaleDateString("en-US", {
+              month: "long",
+              day: "numeric",
+            })}{" "}
+            -{" "}
+            {endDate.toLocaleDateString("en-US", {
+              month: "long",
+              day: "numeric",
+            })}
           </span>
-          <button className="w-[4%] h-[4%] hover:bg-gray-300 rounded-full p-1 ">
+          <button className="w-[1.8rem] h-[1.8rem] hover:bg-gray-300 rounded-full p-1">
             <img
               src={RightArrowIcon}
               alt="RightArrowIcon"
               onClick={goToNextWeek}
+              className="w-[80%] "
             ></img>
           </button>
         </div>
