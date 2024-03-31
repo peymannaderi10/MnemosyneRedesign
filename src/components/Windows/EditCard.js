@@ -5,17 +5,38 @@ function EditCard({ id, onClose, zIndex, bringToFront }) {
     const [selectedButton, setSelectedButton] = useState(null);
     const [tags, setTags] = useState(['tag1', 'tag2']); 
     const [isFrontBackSelected, frontBackSelected] = useState(false);
-    const [isReversibleSelected, reversibileSelected] = useState(false);
+    const [isReversibleSelected, reversibleSelected] = useState(false);
     const [isVocabSelected, vocabSelected] = useState(false);
+    const [isPhraseSelected, phraseSelected] = useState(false);
+    const [isMeaningSelected, meaningSelected] = useState(false);
+    const [isPronunciationSelected, pronunciationSelected] = useState(false);
     const [question, setQuestion] = useState('');
     const [answer, setAnswer] = useState('');
   
     const handleButtonClick = (buttonName) => {
         setSelectedButton(buttonName);
-        frontBackSelected(buttonName === 'Front-Back');
-        reversibileSelected(buttonName === 'Reversible');
+        frontBackSelected(buttonName === 'Front-back');
+        reversibleSelected(buttonName === 'Reversible');
         vocabSelected(buttonName === 'Vocab');
         console.log("card type: ", buttonName);
+    };
+
+    const handleVocabClick = (buttonName) => {
+        if (isVocabSelected) {
+            // If already in vocab mode, do not change selected button
+            phraseSelected(buttonName === 'Phrase');
+            pronunciationSelected(buttonName === 'Pronunciation');
+            meaningSelected(buttonName === 'Meaning');
+            console.log("vocab type: ", buttonName);
+        } else {
+            // If not in vocab mode, set selected button to 'Vocab' only
+            setSelectedButton('Vocab');
+            phraseSelected(buttonName === 'Phrase');
+            pronunciationSelected(buttonName === 'Pronunciation');
+            meaningSelected(buttonName === 'Meaning');
+            vocabSelected(true);
+            console.log("vocab type: ", buttonName);
+        }
     };
 
     const handleAddTag = () => {
@@ -75,7 +96,7 @@ function EditCard({ id, onClose, zIndex, bringToFront }) {
                     ></textarea>
                 </div>
                 {/* Answer input */}
-                <div className="flex-1 mb-10">
+                <div className="flex-1 mb-8">
                     <label htmlFor="answer" className="text-sm font-bold mb-2 block text-left">Answer:</label>
                     <textarea 
                         id="answer" 
@@ -109,6 +130,30 @@ function EditCard({ id, onClose, zIndex, bringToFront }) {
                             Vocab
                         </button>
                     </div>
+                    {/* Render "Vocab Type" section only when "Vocab" is selected */}
+                    {isVocabSelected && (
+                        <div className="flex items-center mb-4">
+                            <span className="text-sm font-bold mr-2">Vocab Type:</span>
+                            <button
+                                onClick={() => handleVocabClick('Phrase')}
+                                className={`bg-${isPhraseSelected ? 'green-500' : 'gray-200'} text-black px-2 py-1 rounded`}
+                            >
+                                Phrase
+                            </button>
+                            <button
+                                onClick={() => handleVocabClick('Pronunciation')}
+                                className={`bg-${isPronunciationSelected ? 'green-500' : 'gray-200'} text-black px-2 py-1 rounded ml-1`}
+                            >
+                                Pronunciation
+                            </button>
+                            <button
+                                onClick={() => handleVocabClick('Meaning')}
+                                className={`bg-${isMeaningSelected ? 'green-500' : 'gray-200'} text-black px-2 py-1 rounded ml-1`}
+                            >
+                                Meaning
+                            </button>
+                        </div>
+                    )}
                     <div className="flex items-center mt-2">
                         <span className="text-sm font-bold mr-2">Tags:</span>
                         {tags.map(tag => (
@@ -123,7 +168,7 @@ function EditCard({ id, onClose, zIndex, bringToFront }) {
                     </div>
                 </div>
 
-            {/* Action buttons */}
+                {/* Action buttons */}
                 <div className="absolute bottom-4 left-4 right-4 flex justify-between">
                     <button className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">
                         Cancel
@@ -132,7 +177,6 @@ function EditCard({ id, onClose, zIndex, bringToFront }) {
                         OK
                     </button>
                 </div>
-
             </div>
         </Rnd>
     );
