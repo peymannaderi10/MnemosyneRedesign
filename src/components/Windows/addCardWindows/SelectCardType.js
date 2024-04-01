@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
 import { Rnd } from 'react-rnd';
+import frontBackImage from './front-back.png';
+import reversibleImage from './reversible.png';
+import vocabImage from './dictionary.png';
+
 
 function SelectCardType({ id, onClose, zIndex, bringToFront, onNext, card: initialCard }) { 
     const [localCard, setLocalCard] = useState(initialCard);
@@ -49,15 +53,29 @@ function SelectCardType({ id, onClose, zIndex, bringToFront, onNext, card: initi
             <label className="text-xl font-bold block mb-2">Choose A Card Type:</label>
             <div className="flex-grow p-4 overflow-auto flex items-center justify-center">
                 <div className="flex justify-between items-center w-full max-w-md">
-                    <button className={`w-32 h-32 rounded focus:outline-none focus:ring-2 ${
-                        localCard.cardType === 'front-back' ? 'bg-blue-700' : 'bg-blue-500'
-                    }`} onClick={() => handleButtonClick('front-back')}></button>
-                    <button className={`w-32 h-32 rounded focus:outline-none focus:ring-2 ${
-                        localCard.cardType === 'reversible' ? 'bg-green-700' : 'bg-green-500'
-                    }`} onClick={() => handleButtonClick('reversible')}></button>
-                    <button className={`w-32 h-32 rounded focus:outline-none focus:ring-2 ${
-                        localCard.cardType === 'vocabulary' ? 'bg-yellow-700' : 'bg-yellow-500'
-                    }`} onClick={() => handleButtonClick('vocabulary')}></button>
+                <button 
+                    className={`w-32 h-32 rounded flex flex-col items-center justify-center focus:outline-none focus:ring-2 ${
+                        localCard.cardType === 'front-back' ? 'bg-blue-600 shadow-2xl' : 'bg-blue-400 hover:shadow-2xl'
+                    }`} 
+                    onClick={() => handleButtonClick('front-back')}
+                >
+                    <img src={frontBackImage} alt="Front-Back" style={{ maxWidth: '80%', maxHeight: '60%' }} />
+                    <span className="text-white text mt-2">Front to Back</span>
+                </button>
+                    <button className={`w-32 h-32 rounded flex flex-col items-center justify-center focus:outline-none focus:ring-2 hover:shadow-2xl ${
+                        localCard.cardType === 'reversible' ? 'bg-green-600 shadow-2xl' : 'bg-green-400 hover:shadow-2xl'
+                    }`} onClick={() => handleButtonClick('reversible')}>
+
+                    <img src={reversibleImage} alt="Front-Back" style={{ maxWidth: '80%', maxHeight: '60%' }} />
+                    <span className="text-white text mt-2">Reversible</span>
+                    </button>
+                    <button className={`w-32 h-32 rounded flex flex-col items-center justify-center focus:outline-none focus:ring-2 hover:shadow-2xl ${
+                        localCard.cardType === 'vocabulary' ? 'bg-yellow-600 shadow-2xl' : 'bg-yellow-400 hover:shadow-2xl'
+                    }`} onClick={() => handleButtonClick('vocabulary')}>
+
+                    <img src={vocabImage} alt="Front-Back" style={{ maxWidth: '80%', maxHeight: '60%' }} />
+                    <span className="text-white text mt-2">Vocabulary</span>
+                    </button>
                 </div>
             </div>
             <div className="flex justify-between mt-4">

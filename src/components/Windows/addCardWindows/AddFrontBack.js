@@ -1,29 +1,54 @@
 import React, { useState } from 'react';
 import { Rnd } from 'react-rnd';
+import CardPreview from './CardPreview';
+
+function ConfirmationModal({ onConfirm, onCancel }) {
+  return (
+    <div className="absolute inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center">
+      <div className="bg-white p-4 rounded-lg shadow-xl">
+        <h2 className="text-lg mb-4">Confirm Add Card</h2>
+        <p>Are you sure you want to add this card?</p>
+        <div className="flex justify-end mt-4">
+          <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded mr-2" onClick={onCancel}>Cancel</button>
+          <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-3 rounded" onClick={onConfirm}>Confirm</button>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 function AddFrontBack({ id, onClose, zIndex, bringToFront, onBack, card: initialCard }) {
   const [localCard, setLocalCard] = useState(initialCard);
   const [frontText, setFrontText] = useState('');
   const [backText, setBackText] = useState('');
-  const [difficulty, setDifficulty] = useState(-1); 
+  const [difficulty, setDifficulty] = useState(-1);
+  const [showPreview, setShowPreview] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const difficultyColors = ["#00FF00", "#95FF66", "#F7E379", "#FFC2A6", "#FF6B5E", "#FF0000"];
 
+  const handleAddCard = () => {
+    setIsModalOpen(true); // Show confirmation modal
+  };
   const handleDifficultyClick = (level) => {
     setDifficulty(level);
   };
-
-  const handleAddCard = () => {
+  const confirmAddCard = () => {
     const updatedCard = { ...localCard, front: frontText, back: backText, level: difficulty };
     setLocalCard(updatedCard);
    
-    //saveCardToFile(updatedCard); // Save to file (this function needs to be implemented)
-
+    //saveCardToFile(updatedCard); // Implement this function as needed
+    onClose(id);
     console.log('Card Added', updatedCard);
+    setIsModalOpen(false); // Close modal
   };
 
-  const handlePreview = () => {   // Placeholder function for preview, to be implemented later
+  const cancelAddCard = () => {
+    setIsModalOpen(false); // Close modal without adding the card
+  };
 
-    console.log(localCard);
+  const handlePreviewToggle = () => {
+    setShowPreview(!showPreview);
   };
 
   const isAddCardEnabled = frontText && backText && difficulty >= 0;
@@ -37,6 +62,13 @@ function AddFrontBack({ id, onClose, zIndex, bringToFront, onBack, card: initial
         onMouseDown={bringToFront}
         enableResizing={false}
     >
+      {isModalOpen && <ConfirmationModal onConfirm={confirmAddCard} onCancel={cancelAddCard} />}
+      {showPreview && (
+        <div
+          className="absolute inset-0 bg-gray-500 bg-opacity-50 z-10"
+          style={{ zIndex: zIndex-1 }}
+        ></div>
+      )}
       <div className="flex-none bg-gray-700 p-2 flex items-center justify-between text-white">
         <span className="text-lg">Add Front/Back</span>
         <button
@@ -51,9 +83,21 @@ function AddFrontBack({ id, onClose, zIndex, bringToFront, onBack, card: initial
       <div className="p-4">
         <div className="flex justify-between items-end">
           <label className="text-lg mb-2">Front:</label>
-          <button onClick={handlePreview} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded mb-2">
+          <button onClick={handlePreviewToggle} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded mb-2">
             Preview
           </button>
+          {showPreview && ( // This will conditionally render the CardPreview component
+              <CardPreview 
+                  frontText={frontText}
+                  backText={backText}
+                  id = {id}
+                  bringToFront = {bringToFront}
+                  onClose={handlePreviewToggle}
+                  zIndex={zIndex} // Make sure this zIndex is high enough
+                  width = "410px"
+              />
+          )}
+
         </div>
         <textarea 
           value={frontText} 
