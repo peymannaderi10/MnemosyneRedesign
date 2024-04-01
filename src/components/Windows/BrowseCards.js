@@ -94,6 +94,10 @@ function BrowseCards({ id, onClose, zIndex, bringToFront }) {
     };
 
     const renderFlashcards = () => {
+        if (filteredFlashcards.length === 0) {
+            return <div className="text-center text-gray-500">No cards found</div>;
+        }
+    
         return filteredFlashcards.map((card) => (
             <div
                 key={card.id}
