@@ -26,6 +26,7 @@ function MainQuiz({ id, onClose, zIndex, bringToFront }) {
   const [showStatistics, setShowStatistics] = useState(false);
   const [statisticsZIndex, setStatisticsZIndex] = useState(zIndex);
 
+ 
   const [questions, setQuestions] = useState([ {
     question: 'What is the capital of France?',
     answer: 'The capital of France is Paris.',
@@ -47,11 +48,28 @@ function MainQuiz({ id, onClose, zIndex, bringToFront }) {
     answer: 'The largest continent in the world is Asia.',
   },
 ]) 
+
+
+
+
+const updateQuestions = (updatedQuestions) => {
+  setQuestions(updatedQuestions);
+};
+
+
+const handleNewCard = (newCard) => {
+  console.log(newCard);
+  const { frontText, backText } = newCard;
+  const updatedCard = {
+    question: frontText,
+    answer: backText,
+  };
+  const updatedQuestions = [...questions, updatedCard];
+  updateQuestions(updatedQuestions);
+};
    
 
-  const updateQuestions = (updatedQuestions) => {
-    setQuestions(updatedQuestions);
-  };
+
 
   const openAddCards = () => {
     setAddCardsZIndex(zIndex + 1); // Ensure the new window is on top
@@ -302,6 +320,8 @@ function MainQuiz({ id, onClose, zIndex, bringToFront }) {
     onClose={closeAddCards}
     zIndex={addCardsZIndex}
     bringToFront={() => setAddCardsZIndex(addCardsZIndex + 1)}
+    onNewCard={handleNewCard}
+
   />
 )}
 {showEditCard && (

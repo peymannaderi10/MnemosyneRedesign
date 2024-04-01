@@ -4,7 +4,7 @@ import SelectTopic from './SelectTopic';
 import AddCorrespondence from './AddCorrespondence';
 import AddFrontBack from './AddFrontBack';
 
-function AddCards({ id, onClose, zIndex, bringToFront}) {
+function AddCards({ id, onClose, zIndex, bringToFront,onNewCard}) {
   const [currentStep, setCurrentStep] = useState('addCards');
   const [card, setCard] = useState({
     cardType: "",
@@ -91,6 +91,7 @@ function AddCards({ id, onClose, zIndex, bringToFront}) {
           zIndex={zIndex}
           bringToFront={bringToFront}
           id={id}
+          onNewCard={onNewCard}
         />
       )}
 

@@ -12,12 +12,7 @@ function EditCard({ id, onClose, zIndex, bringToFront, questions, updateQuestion
     console.log(question)
     const [answer, setAnswer] = useState(questions[currentQuestion].answer);
     
-    const handleSaveChanges = () => {
-        // Assuming you have a way to update the questions array locally
-        const updatedQuestions = [...questions]; // Make a copy of the questions array
-        // Modify the updatedQuestions array as needed
-        updateQuestions(updatedQuestions); // Call the updateQuestions function with the updated array
-      };
+   
   
     const handleButtonClick = (buttonName) => {
         setSelectedButton(buttonName);
