@@ -98,7 +98,16 @@ function BrowseCards({ id, onClose, zIndex, bringToFront }) {
             return <div className="text-center text-gray-500">No cards found</div>;
         }
     
-        return filteredFlashcards.map((card) => (
+        // Sort filtered flashcards by tag
+        const sortedFlashcards = filteredFlashcards.sort((a, b) => {
+            const tagA = a.tags[0].toLowerCase();
+            const tagB = b.tags[0].toLowerCase();
+            if (tagA < tagB) return -1;
+            if (tagA > tagB) return 1;
+            return 0;
+        });
+    
+        return sortedFlashcards.map((card) => (
             <div
                 key={card.id}
                 className={`border p-8 relative ${selectedCards.has(card.id) ? 'bg-blue-100' : ''}`}
@@ -109,6 +118,7 @@ function BrowseCards({ id, onClose, zIndex, bringToFront }) {
             </div>
         ));
     };
+    
 
     return (
         <>
