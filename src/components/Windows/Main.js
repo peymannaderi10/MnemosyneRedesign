@@ -8,7 +8,7 @@ import AddCards from './addCardWindows/AddCards';
 import Statistics from './Statistics';
 import EditCard from './EditCard';
 import BrowseCards from './BrowseCards';
-
+import DeleteConfirmation from './MainWindow/deleteConfirm';
 
 
 function MainQuiz({ id, onClose, zIndex, bringToFront }) {
@@ -25,7 +25,7 @@ function MainQuiz({ id, onClose, zIndex, bringToFront }) {
   const [browseCardsZIndex, setBrowseCardsZIndex] = useState(zIndex);
   const [showStatistics, setShowStatistics] = useState(false);
   const [statisticsZIndex, setStatisticsZIndex] = useState(zIndex);
-
+  const [deleteConfirmationZIndex, setDeleteConfirmationZIndex] = useState(zIndex + 1);
  
   const [questions, setQuestions] = useState([ {
     question: 'What is the capital of France?',
@@ -59,7 +59,7 @@ const updateQuestions = (updatedQuestions) => {
 
 const handleNewCard = (newCard) => {
   console.log(newCard);
-  const { frontText, backText } = newCard;
+  const { frontText, backText } = newCard;  
   const updatedCard = {
     question: frontText,
     answer: backText,
@@ -68,7 +68,11 @@ const handleNewCard = (newCard) => {
   updateQuestions(updatedQuestions);
 };
    
+const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
 
+const toggleDeleteConfirmation = () => {
+  setShowDeleteConfirmation(!showDeleteConfirmation);
+};
 
 
   const openAddCards = () => {
@@ -202,17 +206,18 @@ const handleNewCard = (newCard) => {
           </span>
         </div>
         <div
-          className="sidebar-link relative cursor-pointer"
-          onMouseEnter={(e) => e.currentTarget.querySelector('span').classList.remove('hidden')}
-          onMouseLeave={(e) => e.currentTarget.querySelector('span').classList.add('hidden')}
-        >
-          <div className="flex items-center bg-white rounded-full p-2 shadow-md">
-            <FaTrash className="text-red-500" />
-          </div>
-          <span className="hidden w-fit absolute bottom-0 translate-y-full bg-gray-700 text-white text-xs px-3 py-1 rounded-md">
-            Delete Card
-          </span>
-        </div>
+  className="sidebar-link relative cursor-pointer"
+  onClick={toggleDeleteConfirmation}
+  onMouseEnter={(e) => e.currentTarget.querySelector('span').classList.remove('hidden')}
+  onMouseLeave={(e) => e.currentTarget.querySelector('span').classList.add('hidden')}
+>
+  <div className="flex items-center bg-white rounded-full p-2 shadow-md">
+    <FaTrash className="text-red-500" />
+  </div>
+  <span className="hidden w-fit absolute bottom-0 translate-y-full bg-gray-700 text-white text-xs px-3 py-1 rounded-md">
+    Delete Card
+  </span>
+</div>  
         <div
           className="sidebar-link relative cursor-pointer"
           onClick={openBrowseCards}
@@ -314,6 +319,23 @@ const handleNewCard = (newCard) => {
         </div>
       </div>
     </Rnd>
+    {showDeleteConfirmation && (
+      <DeleteConfirmation
+  onConfirm={(currentQuestion) => {
+    const updatedQuestions = questions.filter(
+      (_, index) => index !== currentQuestion
+    );
+    updateQuestions(updatedQuestions);
+    if (currentQuestion === questions.length - 1) {
+      setCurrentQuestion(0);
+    }
+  }}
+  onCancel={toggleDeleteConfirmation}
+  currentQuestion={currentQuestion}
+  zIndex={deleteConfirmationZIndex}
+  bringToFront={() => setDeleteConfirmationZIndex(deleteConfirmationZIndex + 1)}
+/>
+)}
     {showAddCards && (
   <AddCards
     id={new Date().getTime()}

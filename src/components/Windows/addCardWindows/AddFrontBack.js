@@ -38,7 +38,7 @@ function AddFrontBack({ id, onClose, zIndex, bringToFront, onBack, card: initial
     setLocalCard(updatedCard);
    
     //saveCardToFile(updatedCard); // Implement this function as needed
-    // onClose(id);
+    onClose(id);
     console.log('Card Added', updatedCard);
     setIsModalOpen(false); // Close modal
     onNewCard({frontText,backText});
