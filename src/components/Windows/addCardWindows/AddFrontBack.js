@@ -17,7 +17,22 @@ function ConfirmationModal({ onConfirm, onCancel }) {
   );
 }
 
-function AddFrontBack({ id, onClose, zIndex, bringToFront, onBack, card: initialCard }) {
+function ConfirmationModal({ onConfirm, onCancel }) {
+  return (
+    <div className="absolute inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center">
+      <div className="bg-white p-4 rounded-lg shadow-xl">
+        <h2 className="text-lg mb-4">Confirm Add Card</h2>
+        <p>Are you sure you want to add this card?</p>
+        <div className="flex justify-end mt-4">
+          <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded mr-2" onClick={onCancel}>Cancel</button>
+          <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-3 rounded" onClick={onConfirm}>Confirm</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function AddFrontBack({ id, onClose, zIndex, bringToFront, onBack, card: initialCard,onNewCard }) {
   const [localCard, setLocalCard] = useState(initialCard);
   const [frontText, setFrontText] = useState('');
   const [backText, setBackText] = useState('');
@@ -41,6 +56,8 @@ function AddFrontBack({ id, onClose, zIndex, bringToFront, onBack, card: initial
     onClose(id);
     console.log('Card Added', updatedCard);
     setIsModalOpen(false); // Close modal
+    onNewCard({frontText,backText});
+
   };
 
   const cancelAddCard = () => {

@@ -1,6 +1,6 @@
 {
   "2024-03-07": {
-    "day": "Mon",
+    "day": "Thur",
     "correct": 6,
     "incorrect": 4,
     "highestGrade": 72,
@@ -9,7 +9,7 @@
     "levelCleared": 2
   },
   "2024-03-08": {
-    "day": "Tue",
+    "day": "Fri",
     "correct": 7,
     "incorrect": 3,
     "highestGrade": 75,
@@ -18,7 +18,7 @@
     "levelCleared": 2
   },
   "2024-03-09": {
-    "day": "Wed",
+    "day": "Sat",
     "correct": 8,
     "incorrect": 2,
     "highestGrade": 78,
@@ -27,7 +27,7 @@
     "levelCleared": 3
   },
   "2024-03-10": {
-    "day": "Thu",
+    "day": "Sun",
     "correct": 9,
     "incorrect": 1,
     "highestGrade": 82,
@@ -36,7 +36,7 @@
     "levelCleared": 3
   },
   "2024-03-11": {
-    "day": "Fri",
+    "day": "Mon",
     "correct": 10,
     "incorrect": 0,
     "highestGrade": 85,
@@ -45,7 +45,7 @@
     "levelCleared": 4
   },
   "2024-03-12": {
-    "day": "Sat",
+    "day": "Tues",
     "correct": 4,
     "incorrect": 6,
     "highestGrade": 65,
@@ -54,7 +54,7 @@
     "levelCleared": 2
   },
   "2024-03-13": {
-    "day": "Sun",
+    "day": "Wed",
     "correct": 6,
     "incorrect": 4,
     "highestGrade": 78,
@@ -63,7 +63,7 @@
     "levelCleared": 3
   },
   "2024-03-14": {
-    "day": "Mon",
+    "day": "Thurs",
     "correct": 6,
     "incorrect": 4,
     "highestGrade": 75,
@@ -72,7 +72,7 @@
     "levelCleared": 2
   },
   "2024-03-15": {
-    "day": "Tue",
+    "day": "Fri",
     "correct": 8,
     "incorrect": 3,
     "highestGrade": 77,
@@ -81,7 +81,7 @@
     "levelCleared": 2
   },
   "2024-03-16": {
-    "day": "Wed",
+    "day": "Sat",
     "correct": 9,
     "incorrect": 3,
     "highestGrade": 85,
@@ -90,7 +90,7 @@
     "levelCleared": 3
   },
   "2024-03-17": {
-    "day": "Thu",
+    "day": "Sun",
     "correct": 7,
     "incorrect": 2,
     "highestGrade": 87,
@@ -99,7 +99,7 @@
     "levelCleared": 3
   },
   "2024-03-18": {
-    "day": "Fri",
+    "day": "Mon",
     "correct": 8,
     "incorrect": 1,
     "highestGrade": 92,
@@ -108,7 +108,7 @@
     "levelCleared": 4
   },
   "2024-03-19": {
-    "day": "Sat",
+    "day": "Tues",
     "correct": 10,
     "incorrect": 0,
     "highestGrade": 95,
@@ -117,7 +117,7 @@
     "levelCleared": 5
   },
   "2024-03-20": {
-    "day": "Sun",
+    "day": "Wed",
     "correct": 4,
     "incorrect": 6,
     "highestGrade": 65,
@@ -126,7 +126,7 @@
     "levelCleared": 2
   },
   "2024-03-21": {
-    "day": "Mon",
+    "day": "Thurs",
     "correct": 6,
     "incorrect": 4,
     "highestGrade": 78,
@@ -135,7 +135,7 @@
     "levelCleared": 3
   },
   "2024-03-22": {
-    "day": "Tue",
+    "day": "Fri",
     "correct": 7,
     "incorrect": 3,
     "highestGrade": 79,
@@ -144,7 +144,7 @@
     "levelCleared": 3
   },
   "2024-03-23": {
-    "day": "Wed",
+    "day": "Sat",
     "correct": 9,
     "incorrect": 2,
     "highestGrade": 88,
@@ -379,29 +379,29 @@
   },
   "2024-04-18": {
     "day": "Thurs",
-    "correct": 8,
-    "incorrect": 1,
-    "highestGrade": 89,
-    "avgGrade": 82,
-    "timeStudied": 55,
+    "correct": 3,
+    "incorrect": 2,
+    "highestGrade": 80,
+    "avgGrade": 87,
+    "timeStudied": 56,
     "levelCleared": 4
   },
   "2024-04-19": {
     "day": "Fri",
-    "correct": 10,
-    "incorrect": 0,
-    "highestGrade": 95,
-    "avgGrade": 88,
-    "timeStudied": 60,
-    "levelCleared": 5
+    "correct": 11,
+    "incorrect": 1,
+    "highestGrade": 92,
+    "avgGrade": 85,
+    "timeStudied": 64,
+    "levelCleared": 3
   },
   "2024-04-20": {
     "day": "Sat",
-    "correct": 11,
-    "incorrect": 0,
-    "highestGrade": 98,
-    "avgGrade": 92,
-    "timeStudied": 65,
-    "levelCleared": 5
+    "correct": 14,
+    "incorrect": 2,
+    "highestGrade": 45,
+    "avgGrade": 62,
+    "timeStudied": 75,
+    "levelCleared": 6
   }
 }
