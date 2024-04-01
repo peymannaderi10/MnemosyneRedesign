@@ -7,9 +7,26 @@ import { FaPlus, FaEdit, FaTrash, FaBook, FaDoorOpen } from 'react-icons/fa';
 import AddCards from './addCardWindows/AddCards';
 import Statistics from './Statistics';
 import EditCard from './EditCard';
+import BrowseCards from './BrowseCards';
 
-const questions = [
-  {
+
+
+function MainQuiz({ id, onClose, zIndex, bringToFront }) {
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [showAnswer, setShowAnswer] = useState(false);
+  const [rating, setRating] = useState(0);
+  const [questionMode, setQuestionMode] = useState('mode1');
+  const [showAddCards, setShowAddCards] = useState(false);
+  const [addCardsZIndex, setAddCardsZIndex] = useState(zIndex);
+  const [showEditCard, setShowEditCard] = useState(false);
+  const [editCardZIndex, setEditCardZIndex] = useState(zIndex);
+  const [showBrowseCards, setShowBrowseCards] = useState(false);
+  const [browseCardsZIndex, setBrowseCardsZIndex] = useState(zIndex);
+  const [showStatistics, setShowStatistics] = useState(false);
+  const [statisticsZIndex, setStatisticsZIndex] = useState(zIndex);
+
+  const [questions, setQuestions] = useState([ {
     question: 'What is the capital of France?',
     answer: 'The capital of France is Paris.',
   },
@@ -29,22 +46,12 @@ const questions = [
     question: 'What is the largest continent in the world?',
     answer: 'The largest continent in the world is Asia.',
   },
-];
+]) 
+   
 
-function MainQuiz({ id, onClose, zIndex, bringToFront }) {
-  const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [showAnswer, setShowAnswer] = useState(false);
-  const [rating, setRating] = useState(0);
-  const [questionMode, setQuestionMode] = useState('mode1');
-  const [showAddCards, setShowAddCards] = useState(false);
-  const [addCardsZIndex, setAddCardsZIndex] = useState(zIndex);
-  const [showEditCard, setShowEditCard] = useState(false);
-  const [editCardZIndex, setEditCardZIndex] = useState(zIndex);
-  const [showBrowseCards, setShowBrowseCards] = useState(false);
-  const [browseCardsZIndex, setBrowseCardsZIndex] = useState(zIndex);
-  const [showStatistics, setShowStatistics] = useState(false);
-  const [statisticsZIndex, setStatisticsZIndex] = useState(zIndex);
+  const updateQuestions = (updatedQuestions) => {
+    setQuestions(updatedQuestions);
+  };
 
   const openAddCards = () => {
     setAddCardsZIndex(zIndex + 1); // Ensure the new window is on top
@@ -82,9 +89,7 @@ function MainQuiz({ id, onClose, zIndex, bringToFront }) {
     setShowStatistics(false);
   };
 
-  const toggleSidebar = () => {
-    setSidebarOpen(!sidebarOpen);
-  };
+
 
   const handleShowAnswer = () => {
     setShowAnswer(true);
@@ -192,12 +197,14 @@ function MainQuiz({ id, onClose, zIndex, bringToFront }) {
         </div>
         <div
           className="sidebar-link relative cursor-pointer"
+          onClick={openBrowseCards}
           onMouseEnter={(e) => e.currentTarget.querySelector('span').classList.remove('hidden')}
           onMouseLeave={(e) => e.currentTarget.querySelector('span').classList.add('hidden')}
         >
           <div className="flex items-center bg-white rounded-full p-2 shadow-md">
             <FaBook className="text-blue-500" />
           </div>
+          
           <span className="hidden absolute bottom-0 translate-y-full bg-gray-700 text-white text-xs px-2 py-1 rounded-md">
             Browse Cards
           </span>
@@ -303,6 +310,9 @@ function MainQuiz({ id, onClose, zIndex, bringToFront }) {
     onClose={closeEditCard}
     zIndex={editCardZIndex}
     bringToFront={() => setEditCardZIndex(editCardZIndex + 1)}
+    questions={questions}
+    updateQuestions={updateQuestions}
+    currentQuestion={currentQuestion}
   />
 )}
 {showStatistics && (
@@ -311,6 +321,14 @@ function MainQuiz({ id, onClose, zIndex, bringToFront }) {
     onClose={closeStatistics}
     zIndex={statisticsZIndex}
     bringToFront={() => setStatisticsZIndex(statisticsZIndex + 1)}
+  />
+)}
+{showBrowseCards && (
+  <BrowseCards
+    id={new Date().getTime()}
+    onClose={closeBrowseCards}
+    zIndex={browseCardsZIndex}
+    bringToFront={() => setBrowseCardsZIndex(browseCardsZIndex + 1)}
   />
 )}
 
