@@ -5,26 +5,61 @@ function EditCard({ id, onClose, zIndex, bringToFront, questions, updateQuestion
     const [selectedButton, setSelectedButton] = useState(null);
     const [tags, setTags] = useState(['tag1', 'tag2']); 
     const [isFrontBackSelected, frontBackSelected] = useState(false);
-    const [isReversibleSelected, reversibileSelected] = useState(false);
+    const [isReversibleSelected, reversibleSelected] = useState(false);
     const [isVocabSelected, vocabSelected] = useState(false);
-
+    const [isPhraseSelected, phraseSelected] = useState(false);
+    const [isMeaningSelected, meaningSelected] = useState(false);
+    const [isPronunciationSelected, pronunciationSelected] = useState(false);
     const [question, setQuestion] = useState(questions[currentQuestion].question);
     console.log(question)
     const [answer, setAnswer] = useState(questions[currentQuestion].answer);
-    
+    const [difficulty, setDifficulty] = useState(-1);
+
+    const difficultyColors = ["#00FF00", "#95FF66", "#F7E379", "#FFC2A6", "#FF6B5E", "#FF0000"];
    
+    const handleDifficultyClick = (level) => {
+        setDifficulty(level);
+      };
   
     const handleButtonClick = (buttonName) => {
         setSelectedButton(buttonName);
-        frontBackSelected(buttonName === 'Front-Back');
-        reversibileSelected(buttonName === 'Reversible');
+        frontBackSelected(buttonName === 'Front-back');
+        reversibleSelected(buttonName === 'Reversible');
         vocabSelected(buttonName === 'Vocab');
         console.log("card type: ", buttonName);
+    };
+
+    const handleCancelClick = () => {
+        onClose(id);
+      };
+
+    const handleVocabClick = (buttonName) => {
+        if (isVocabSelected) {
+            // If already in vocab mode, do not change selected button
+            phraseSelected(buttonName === 'Phrase');
+            pronunciationSelected(buttonName === 'Pronunciation');
+            meaningSelected(buttonName === 'Meaning');
+            console.log("vocab type: ", buttonName);
+        } else {
+            // If not in vocab mode, set selected button to 'Vocab' only
+            setSelectedButton('Vocab');
+            phraseSelected(buttonName === 'Phrase');
+            pronunciationSelected(buttonName === 'Pronunciation');
+            meaningSelected(buttonName === 'Meaning');
+            vocabSelected(true);
+            console.log("vocab type: ", buttonName);
+        }
     };
 
     const handleAddTag = () => {
         const newTag = prompt('Enter a new tag:');
         if (newTag) {
+            // Check if the new tag already exists in the tags array
+            if (tags.includes(newTag)) {
+                alert('Tag already exists!');
+                return; // Exit the function if the tag already exists
+            }
+            // Add the new tag only if it doesn't exist already
             setTags([...tags, newTag]);
             console.log("Updated tags:", [...tags, newTag]);
         }
@@ -53,7 +88,7 @@ function EditCard({ id, onClose, zIndex, bringToFront, questions, updateQuestion
             answer,
           });
         }
-      
+        console.log("Difficulty:", difficulty);
         updateQuestions(updatedQuestions);
         console.log("Question:", question, "Answer:", answer);
         onClose(id); // Close the edit card modal after updating the questions
@@ -65,7 +100,7 @@ function EditCard({ id, onClose, zIndex, bringToFront, questions, updateQuestion
                 x: 100,
                 y: 100,
                 width: 500,
-                height: 600,
+                height: 625,
             }}
             bounds=".main-area"
             style={{ zIndex }}
@@ -98,7 +133,7 @@ function EditCard({ id, onClose, zIndex, bringToFront, questions, updateQuestion
                     ></textarea>
                 </div>
                 {/* Answer input */}
-                <div className="flex-1 mb-10">
+                <div className="flex-1 mb-4">
                     <label htmlFor="answer" className="text-sm font-bold mb-2 block text-left">Answer:</label>
                     <textarea 
                         id="answer" 
@@ -115,23 +150,47 @@ function EditCard({ id, onClose, zIndex, bringToFront, questions, updateQuestion
                         <span className="text-sm font-bold mr-2">Card Type:</span>
                         <button
                             onClick={() => handleButtonClick('Front-back')}
-                            className={`bg-${selectedButton === 'Front-back' ? 'red-500' : 'gray-200'} text-black px-2 py-1 rounded`}
+                            className={`bg-${selectedButton === 'Front-back' ? 'green-500' : 'gray-200'} text-black px-2 py-1 rounded`}
                         >
                             Front-back
                         </button>
                         <button
                             onClick={() => handleButtonClick('Reversible')}
-                            className={`bg-${selectedButton === 'Reversible' ? 'red-500' : 'gray-200'} text-black px-2 py-1 rounded ml-1`}
+                            className={`bg-${selectedButton === 'Reversible' ? 'green-500' : 'gray-200'} text-black px-2 py-1 rounded ml-1`}
                         >
                             Reversible
                         </button>
                         <button
                             onClick={() => handleButtonClick('Vocab')}
-                            className={`bg-${selectedButton === 'Vocab' ? 'red-500' : 'gray-200'} text-black px-2 py-1 rounded ml-1`}
+                            className={`bg-${selectedButton === 'Vocab' ? 'green-500' : 'gray-200'} text-black px-2 py-1 rounded ml-1`}
                         >
                             Vocab
                         </button>
                     </div>
+                    {/* Render "Vocab Type" section only when "Vocab" is selected */}
+                    {isVocabSelected && (
+                        <div className="flex items-center mb-4">
+                            <span className="text-sm font-bold mr-2">Vocab Type:</span>
+                            <button
+                                onClick={() => handleVocabClick('Phrase')}
+                                className={`bg-${isPhraseSelected ? 'green-500' : 'gray-200'} text-black px-2 py-1 rounded`}
+                            >
+                                Phrase
+                            </button>
+                            <button
+                                onClick={() => handleVocabClick('Pronunciation')}
+                                className={`bg-${isPronunciationSelected ? 'green-500' : 'gray-200'} text-black px-2 py-1 rounded ml-1`}
+                            >
+                                Pronunciation
+                            </button>
+                            <button
+                                onClick={() => handleVocabClick('Meaning')}
+                                className={`bg-${isMeaningSelected ? 'green-500' : 'gray-200'} text-black px-2 py-1 rounded ml-1`}
+                            >
+                                Meaning
+                            </button>
+                        </div>
+                    )}
                     <div className="flex items-center mt-2">
                         <span className="text-sm font-bold mr-2">Tags:</span>
                         {tags.map(tag => (
@@ -144,18 +203,34 @@ function EditCard({ id, onClose, zIndex, bringToFront, questions, updateQuestion
                             +
                         </button>     
                     </div>
+                    <div className="flex items-center mt-2.5"> 
+                        <span className="text-sm font-bold mr-2">Difficulty Level:</span> 
+                        <div className="flex">
+                            {difficultyColors.map((color, index) => (
+                            <button
+                                key={index}
+                                onClick={() => handleDifficultyClick(index)}
+                                style={{ backgroundColor: color }}
+                                className={`font-bold py-1 px-3 m-1 rounded ${
+                                difficulty === index ? 'ring-2 ring-offset-1 ring-black' : ''
+                                }`}
+                            >
+                                {index}
+                            </button>
+                            ))}
+                        </div>
+                    </div>
                 </div>
 
-            {/* Action buttons */}
+                {/* Action buttons */}
                 <div className="absolute bottom-4 left-4 right-4 flex justify-between">
-                    <button className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">
+                    <button onClick={() => handleCancelClick()} className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">
                         Cancel
                     </button>
                     <button onClick={() => handleOkClick()} className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">
                         OK
                     </button>
                 </div>
-
             </div>
         </Rnd>
     );
