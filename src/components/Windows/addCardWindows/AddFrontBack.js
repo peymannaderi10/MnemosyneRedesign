@@ -17,7 +17,7 @@ function ConfirmationModal({ onConfirm, onCancel }) {
   );
 }
 
-function AddFrontBack({ id, onClose, zIndex, bringToFront, onBack, card: initialCard }) {
+function AddFrontBack({ id, onClose, zIndex, bringToFront, onBack, card: initialCard,onNewCard }) {
   const [localCard, setLocalCard] = useState(initialCard);
   const [frontText, setFrontText] = useState('');
   const [backText, setBackText] = useState('');
@@ -41,6 +41,8 @@ function AddFrontBack({ id, onClose, zIndex, bringToFront, onBack, card: initial
     onClose(id);
     console.log('Card Added', updatedCard);
     setIsModalOpen(false); // Close modal
+    onNewCard({frontText,backText});
+
   };
 
   const cancelAddCard = () => {

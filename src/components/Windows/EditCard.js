@@ -1,17 +1,18 @@
 import React, { useState } from 'react';
 import { Rnd } from 'react-rnd';
 
-function EditCard({ id, onClose, zIndex, bringToFront }) {
+function EditCard({ id, onClose, zIndex, bringToFront, questions, updateQuestions, currentQuestion }) {
     const [selectedButton, setSelectedButton] = useState(null);
     const [tags, setTags] = useState(['tag1', 'tag2']); 
     const [isFrontBackSelected, frontBackSelected] = useState(false);
     const [isReversibleSelected, reversibleSelected] = useState(false);
     const [isVocabSelected, vocabSelected] = useState(false);
-    const [isPhraseSelected, phraseSelected] = useState(false);
-    const [isMeaningSelected, meaningSelected] = useState(false);
-    const [isPronunciationSelected, pronunciationSelected] = useState(false);
-    const [question, setQuestion] = useState('');
-    const [answer, setAnswer] = useState('');
+
+    const [question, setQuestion] = useState(questions[currentQuestion].question);
+    console.log(question)
+    const [answer, setAnswer] = useState(questions[currentQuestion].answer);
+    
+   
   
     const handleButtonClick = (buttonName) => {
         setSelectedButton(buttonName);
@@ -54,8 +55,27 @@ function EditCard({ id, onClose, zIndex, bringToFront }) {
     };
 
     const handleOkClick = () => {
+        const updatedQuestions = [...questions]; // Make a copy of the questions array
+        const questionIndex = updatedQuestions.findIndex(
+          (q) => q.question === questions[currentQuestion].question
+        );
+      
+        if (questionIndex !== -1) {
+          updatedQuestions[questionIndex] = {
+            question,
+            answer,
+          };
+        } else {
+          updatedQuestions.push({
+            question,
+            answer,
+          });
+        }
+      
+        updateQuestions(updatedQuestions);
         console.log("Question:", question, "Answer:", answer);
-    };
+        onClose(id); // Close the edit card modal after updating the questions
+      };
 
     return (
         <Rnd

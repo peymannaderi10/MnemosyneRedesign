@@ -64,6 +64,10 @@ function Statistics({ id, onClose, zIndex, bringToFront }) {
   const endDate = new Date(startDate);
   endDate.setDate(startDate.getDate() + 6);
 
+  const disablePreviousButton = startDate <= new Date(Object.keys(statData)[0]);
+  const disableNextButton =
+    endDate >= new Date(Object.keys(statData).slice(-1)[0]);
+
   useEffect(() => {
     fetchDataForWeek();
   }, [startDate]);
@@ -85,8 +89,7 @@ function Statistics({ id, onClose, zIndex, bringToFront }) {
       const date = new Date(dataObject.date);
       return date >= startOfStartDate && date <= endOfEndDate;
     });
-    console.log(startOfStartDate, endOfEndDate);
-    console.log(filteredWeekData);
+
     setData(filteredWeekData);
   }, [startDate]);
 
@@ -226,12 +229,16 @@ function Statistics({ id, onClose, zIndex, bringToFront }) {
           {chartComps[toggleState]}
         </div>
         <div className="flex justify-center gap-[0.5rem] align-middle">
-          <button className="w-[1.8rem] h-[1.8rem] hover:bg-gray-300 rounded-full p-1">
+          <button
+            className="w-[1.8rem] h-[1.8rem] hover:bg-gray-300 rounded-full p-1"
+            disabled={disablePreviousButton}
+          >
             <img
               src={LeftArrowIcon}
               alt="LeftArrowIcon"
               onClick={goToPreviousWeek}
               className="w-[80%]"
+              style={{ opacity: disablePreviousButton ? 0.2 : 1.0 }}
             ></img>
           </button>
           <span className="font-semibold text-[0.8em] text-center">
@@ -245,11 +252,15 @@ function Statistics({ id, onClose, zIndex, bringToFront }) {
               day: "numeric",
             })}
           </span>
-          <button className="w-[1.8rem] h-[1.8rem] hover:bg-gray-300 rounded-full p-1">
+          <button
+            className="w-[1.8rem] h-[1.8rem] hover:bg-gray-300 rounded-full p-1"
+            disabled={disableNextButton}
+          >
             <img
               src={RightArrowIcon}
               alt="RightArrowIcon"
               onClick={goToNextWeek}
+              style={{ opacity: disableNextButton ? 0.2 : 1.0 }}
               className="w-[80%] "
             ></img>
           </button>
