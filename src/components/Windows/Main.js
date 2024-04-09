@@ -144,7 +144,7 @@ const toggleDeleteConfirmation = () => {
           <button
             onClick={(e) => {
               e.stopPropagation();
-              onClose(id);
+              // onClose(id);
             }}
             className="bg-red-500 hover:bg-red-600 h-4 w-4 rounded-full mb-1"
             aria-label="Close"
